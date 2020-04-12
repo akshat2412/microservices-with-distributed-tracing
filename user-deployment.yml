@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+    name: user-microservice-deployment
+    labels:
+        app: user-microservice
+spec:
+    replicas: 3
+    selector:
+        matchLabels:
+            app: user
+    template:
+        metadata:
+            labels:
+                app: user
+        spec:
+            containers:
+                - name: user-microservice
+                  image: akshatunofficial/user-microservice-with-tracing:latest
+                  ports:
+                    - containerPort: 8080
+                  env:
+                    - name: USER_MICROSERVICE_PORT
+                        value: 8080
+                    - name: DB_HOST
+                        value: 35.239.90.224
+                    - name: DB_USERNAME
+                        value: postgres
+                    - name: DB_PASSWORD
+                        value: password
+                    - name: DB_DATABASE
+                        value: postgres
+                    - name: DB_PORT
+                        value: 80
+                    - name: TRACING_COLLECTOR_ENDPOINT
+                        value: 34.68.148.171:14268/api/traces

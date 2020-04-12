@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+    name: order-microservice-deployment
+    labels:
+        app: order-microservice
+spec:
+    replicas: 3
+    selector:
+        matchLabels:
+            app: order
+    template:
+        metadata:
+            labels:
+                app: order
+        spec:
+            containers:
+                - name: order-microservice
+                  image: akshatunofficial/order-microservice-with-tracing:latest
+                  ports:
+                    - containerPort: 8080
+                  env:
+                    - name: ORDER_MICROSERVICE_PORT
+                        value: "8085"
+                    - name: TRACING_COLLECTOR_ENDPOINT
+                        value: "34.68.148.171:14268/api/traces"

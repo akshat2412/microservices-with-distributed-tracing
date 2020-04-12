@@ -1,0 +1,67 @@
+version: "3.4"
+
+services:
+    user-microservice:
+        image: akshatunofficial/user-microservice-with-tracing
+        build: 
+            context: ./User_Microservice
+            dockerfile: Dockerfile
+        ports: 
+            - "8080:8080"
+        container_name: user-microservice
+        depends_on: [jaeger-service, postgres]
+        environment:
+            USER_MICROSERVICE_PORT: 8080,
+            DB_HOST: http://postgres
+            DB_USERNAME: postgres
+            DB_PASSWORD: password
+            DB_DATABASE: postgres
+            DB_PORT: 5432
+            TRACING_COLLECTOR_ENDPOINT: http://jaeger-service:14268/api/traces
+    order-microservice:
+        image: akshatunofficial/order-microservice-with-tracing
+        build: 
+            context: ./Order_Microservice
+            dockerfile: Dockerfile
+        ports: 
+            - "8085:8085"
+        container_name: order-microservice
+        depends_on: [jaeger-service]
+        environment:
+            ORDER_MICROSERVICE_PORT: 8085
+            TRACING_COLLECTOR_ENDPOINT: http://jaeger-service:14268/api/traces
+    aggregator-microservice:
+        image: akshatunofficial/aggregator-microservice-with-tracing
+        build:
+            context: ./Aggregator_Microservice
+            dockerfile: Dockerfile
+        ports:
+            - "8086:8086"
+        container_name: aggregator-microservice
+        depends_on: [jaeger-service]
+        environment:
+            AGGREGATOR_MICROSERVICE_PORT: 8086
+            USER_MICROSERVICE_URL: http://user-microservice:8080
+            ORDER_MICROSERVICE_URL: http://order-microservice:8085
+            TRACING_SERVICE_HOST: http://jaeger-service
+            TRACINT_SERVICE_PORT: 6832
+            TRACING_COLLECTOR_ENDPOINT: http://jaeger-service:14268/api/traces
+    jaeger-service:
+        image: jaegertracing/all-in-one:latest
+        ports:
+            - "6832:6832/udp" 
+            - "6831:6831/udp" 
+            - "5775:5775/udp" 
+            - "5778:5778"
+            - "16686:16686" 
+            - "14268:14268"
+        environment: 
+            COLLECTOR_ZIPKIN_HTTP_PORT: 9411
+        container_name: jaeger-service
+    postgres:
+        image: postgres
+        ports:
+            - "6551:5432"
+        environment:
+            POSTGRES_PASSWORD: password
+        container_name: postgres

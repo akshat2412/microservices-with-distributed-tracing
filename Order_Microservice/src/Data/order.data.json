@@ -1,0 +1,42 @@
+{
+    "orderList": [
+        {
+            "id": "1",
+            "username": "MishaPickens",
+            "status": "success",
+            "productsList": [
+                {
+                    "id": "146e5b50-5119-43de-a2f6-8d7334aea007",
+                    "name": "Casio G Shock Watch Solar Atom (gwm500a-1)",
+                    "quantity": 3,
+                    "amount": 1498
+                },
+                {
+                    "id": "eff24f9a-c455-4e51-8580-7aea4753e1ad",
+                    "name": "Belkin GS5 Sport Fit Armband, Black F8M918B1C00",
+                    "quantity": 3,
+                    "amount": 5943
+                }
+            ],
+            "amount": 809,
+            "address": "dummy address",
+            "delivery": "delivered"
+        },
+        {
+            "id": "2",
+            "username": "IdellDock",
+            "status": "success",
+            "productsList": [
+                {
+                    "id": "a5d12521-652b-4bbb-92fc-dfc20537737c",
+                    "name": "GLORIA HIGH LOGO SNEAKER",
+                    "quantity": 2,
+                    "amount": 2627
+                }
+            ],
+            "amount": 5254,
+            "address": "dummy address",
+            "delivery": "enroute"
+        }
+    ] 
+}

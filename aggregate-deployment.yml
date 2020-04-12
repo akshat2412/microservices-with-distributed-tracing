@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+    name: aggregate-microservice-deployment
+    labels:
+        app: aggregate-microservice
+spec:
+    replicas: 3
+    selector:
+        matchLabels:
+            app: aggregate
+    template:
+        metadata:
+            labels:
+                app: aggregate
+        spec:
+            containers:
+                - name: aggregate-microservice
+                  image: akshatunofficial/aggregate-microservice-with-tracing:latest
+                  ports:
+                    - containerPort: 8086
+                  env:
+                    - name: AGGREGATE_MICROSERVICE_PORT
+                      value: "8086"
+                    - name: USER_MICROSERVICE_URL
+                      value: "http://user-microservice-deployment-service"
+                    - name: ORDER_MICROSERVICE_URL
+                      value: "http://order-microservice-deployment-service"
+                    - name: TRACING_COLLECTOR_ENDPOINT
+                      value: "34.68.148.171:14268/api/traces"
